@@ -1,8 +1,12 @@
+using System;
 using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
+    [SerializeField] private Transform spawnPosition;
+    [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private LayerMask shootlayer;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -20,7 +24,8 @@ public class PlayerBehavior : MonoBehaviour
 
         CheckSpriteFlip(moveX);
         CheckMoveAnim(moveX);
-        ShootingHandler();
+        ProjectilleShootingHandler();
+        RaycastShootingHandler();
     }    
 
     private void CheckSpriteFlip(float moveX)
@@ -47,11 +52,14 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
-    private void ShootingHandler()
+    private void ProjectilleShootingHandler()
     {
         if (Input.GetButtonDown("Fire1"))
         {
             animator.SetTrigger("shot");
+            Instantiate(projectilePrefab,
+                spawnPosition.position,
+                projectilePrefab.transform.rotation);
         }
         else
         {
